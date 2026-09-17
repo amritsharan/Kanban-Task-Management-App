@@ -1,0 +1,472 @@
+{
+  "users": [
+    {
+      "id": "usr-1",
+      "name": "Alex Rivera",
+      "email": "alex.rivera@quantiphi.com",
+      "avatar_url": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
+      "role": "Lead Architect",
+      "created_at": "2026-09-17T14:07:43.797Z"
+    },
+    {
+      "id": "usr-2",
+      "name": "Priya Sharma",
+      "email": "priya.sharma@quantiphi.com",
+      "avatar_url": "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80",
+      "role": "Senior ML Engineer",
+      "created_at": "2026-09-17T14:07:43.799Z"
+    },
+    {
+      "id": "usr-3",
+      "name": "Marcus Chen",
+      "email": "marcus.chen@quantiphi.com",
+      "avatar_url": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80",
+      "role": "Frontend Specialist",
+      "created_at": "2026-09-17T14:07:43.799Z"
+    },
+    {
+      "id": "usr-4",
+      "name": "Elena Rostova",
+      "email": "elena.rostova@quantiphi.com",
+      "avatar_url": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=150&auto=format&fit=crop&q=80",
+      "role": "DevOps & SRE",
+      "created_at": "2026-09-17T14:07:43.799Z"
+    },
+    {
+      "id": "usr-5",
+      "name": "David Kim",
+      "email": "david.kim@quantiphi.com",
+      "avatar_url": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80",
+      "role": "QA & Compliance Lead",
+      "created_at": "2026-09-17T14:07:43.799Z"
+    }
+  ],
+  "projects": [
+    {
+      "id": "proj-1",
+      "name": "Neural Core v2.0",
+      "description": "Next-gen enterprise deep learning inference pipeline & telemetry",
+      "color": "#6366f1",
+      "created_at": "2026-09-17T14:07:43.799Z"
+    },
+    {
+      "id": "proj-2",
+      "name": "Underwater Sound Analyser",
+      "description": "Real-time acoustic telemetry and bio-sonar classifier",
+      "color": "#06b6d4",
+      "created_at": "2026-09-17T14:07:43.799Z"
+    }
+  ],
+  "project_members": [
+    {
+      "id": "pm-1",
+      "project_id": "proj-1",
+      "user_id": "usr-1",
+      "role": "Admin",
+      "joined_at": "2026-09-17T14:07:43.799Z"
+    },
+    {
+      "id": "pm-2",
+      "project_id": "proj-1",
+      "user_id": "usr-2",
+      "role": "Member",
+      "joined_at": "2026-09-17T14:07:43.799Z"
+    },
+    {
+      "id": "pm-3",
+      "project_id": "proj-1",
+      "user_id": "usr-3",
+      "role": "Member",
+      "joined_at": "2026-09-17T14:07:43.799Z"
+    },
+    {
+      "id": "pm-4",
+      "project_id": "proj-1",
+      "user_id": "usr-4",
+      "role": "Member",
+      "joined_at": "2026-09-17T14:07:43.799Z"
+    },
+    {
+      "id": "pm-5",
+      "project_id": "proj-1",
+      "user_id": "usr-5",
+      "role": "Viewer",
+      "joined_at": "2026-09-17T14:07:43.799Z"
+    },
+    {
+      "id": "pm-6",
+      "project_id": "proj-2",
+      "user_id": "usr-1",
+      "role": "Admin",
+      "joined_at": "2026-09-17T14:07:43.799Z"
+    },
+    {
+      "id": "pm-7",
+      "project_id": "proj-2",
+      "user_id": "usr-2",
+      "role": "Member",
+      "joined_at": "2026-09-17T14:07:43.799Z"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "task-101",
+      "project_id": "proj-1",
+      "title": "Design PostgreSQL Relational Schema & Indexes",
+      "description": "Implement foreign key constraints, project_members junction, and task ordering indexes for sub-millisecond query latency.",
+      "status": "DONE",
+      "priority": "HIGH",
+      "due_date": "2026-09-15",
+      "assigned_to": "usr-1",
+      "order_index": 0,
+      "created_at": "2026-09-13T14:07:43.800Z",
+      "updated_at": "2026-09-17T14:07:43.800Z"
+    },
+    {
+      "id": "task-102",
+      "project_id": "proj-1",
+      "title": "Implement JWT Auth & Role-based Access Control",
+      "description": "Enforce Admin vs Member vs Viewer permissions across all project CRUD endpoints.",
+      "status": "DONE",
+      "priority": "MEDIUM",
+      "due_date": "2026-09-16",
+      "assigned_to": "usr-4",
+      "order_index": 1,
+      "created_at": "2026-09-14T14:07:43.800Z",
+      "updated_at": "2026-09-17T14:07:43.800Z"
+    },
+    {
+      "id": "task-103",
+      "project_id": "proj-1",
+      "title": "Build Drag-and-Drop Column Reordering Engine",
+      "description": "Ensure smooth multi-column drag movements with visual drop placeholders and optimistic state updates.",
+      "status": "IN_PROGRESS",
+      "priority": "URGENT",
+      "due_date": "2026-09-18",
+      "assigned_to": "usr-3",
+      "order_index": 0,
+      "created_at": "2026-09-15T14:07:43.800Z",
+      "updated_at": "2026-09-17T14:07:43.800Z"
+    },
+    {
+      "id": "task-104",
+      "project_id": "proj-1",
+      "title": "Workload Balancing & Red Pulse Burnout Alert",
+      "description": "Server calculates In-Progress task count per user. Highlight user avatar with pulsating red glow when count > 5.",
+      "status": "IN_PROGRESS",
+      "priority": "URGENT",
+      "due_date": "2026-09-19",
+      "assigned_to": "usr-2",
+      "order_index": 1,
+      "created_at": "2026-09-15T14:07:43.800Z",
+      "updated_at": "2026-09-17T14:07:43.800Z"
+    },
+    {
+      "id": "task-105",
+      "project_id": "proj-1",
+      "title": "API Rate Limiting & Centralized Resilience Middleware",
+      "description": "Add token-bucket rate limiter and centralized error handling middleware for REST endpoints.",
+      "status": "IN_PROGRESS",
+      "priority": "MEDIUM",
+      "due_date": "2026-09-20",
+      "assigned_to": "usr-2",
+      "order_index": 2,
+      "created_at": "2026-09-16T14:07:43.800Z",
+      "updated_at": "2026-09-17T14:07:43.800Z"
+    },
+    {
+      "id": "task-106",
+      "project_id": "proj-1",
+      "title": "Audio Feature Extraction Pipeline Benchmark",
+      "description": "Benchmark Mel-Spectrogram transforms and streaming FFT latency on Edge nodes.",
+      "status": "IN_PROGRESS",
+      "priority": "HIGH",
+      "due_date": "2026-09-20",
+      "assigned_to": "usr-2",
+      "order_index": 3,
+      "created_at": "2026-09-16T14:07:43.800Z",
+      "updated_at": "2026-09-17T14:07:43.800Z"
+    },
+    {
+      "id": "task-107",
+      "project_id": "proj-1",
+      "title": "Real-time Telemetry Sync for Concurrent Sessions",
+      "description": "Broadcast task updates across all connected team sessions with optimistic resolution.",
+      "status": "TODO",
+      "priority": "MEDIUM",
+      "due_date": "2026-09-22",
+      "assigned_to": "usr-1",
+      "order_index": 0,
+      "created_at": "2026-09-17T14:07:43.800Z",
+      "updated_at": "2026-09-17T14:07:43.800Z"
+    },
+    {
+      "id": "task-108",
+      "project_id": "proj-1",
+      "title": "End-to-End Integration Test Suite",
+      "description": "Automate verification of task creation, status transitions, and burnout triggers.",
+      "status": "TODO",
+      "priority": "LOW",
+      "due_date": "2026-09-24",
+      "assigned_to": "usr-5",
+      "order_index": 1,
+      "created_at": "2026-09-17T14:07:43.800Z",
+      "updated_at": "2026-09-17T14:07:43.800Z"
+    },
+    {
+      "id": "task-109",
+      "project_id": "proj-1",
+      "title": "Multi-Project Export to CSV & JSON format",
+      "description": "Allow team leads to export sprint velocity reports with full timestamp audit logs.",
+      "status": "TODO",
+      "priority": "LOW",
+      "due_date": "2026-09-27",
+      "assigned_to": "usr-3",
+      "order_index": 2,
+      "created_at": "2026-09-17T14:07:43.800Z",
+      "updated_at": "2026-09-17T14:07:43.800Z"
+    },
+    {
+      "id": "task-sim-3kttg1v",
+      "project_id": "proj-1",
+      "title": "Refactor high-throughput message streaming buffer",
+      "description": "Auto-generated workload spike task demonstrating the Workload Balancing & Red Burnout Pulse alert system.",
+      "status": "IN_PROGRESS",
+      "priority": "URGENT",
+      "due_date": "2026-09-18",
+      "assigned_to": "usr-4",
+      "order_index": 0,
+      "created_at": "2026-09-17T14:16:46.191Z",
+      "updated_at": "2026-09-17T14:34:09.696Z"
+    },
+    {
+      "id": "task-sim-650t2lq",
+      "project_id": "proj-1",
+      "title": "Resolve race condition in worker event queue",
+      "description": "Auto-generated workload spike task demonstrating the Workload Balancing & Red Burnout Pulse alert system.",
+      "status": "IN_PROGRESS",
+      "priority": "URGENT",
+      "due_date": "2026-09-19",
+      "assigned_to": "usr-3",
+      "order_index": 1,
+      "created_at": "2026-09-17T14:16:46.195Z",
+      "updated_at": "2026-09-17T14:34:09.696Z"
+    },
+    {
+      "id": "task-sim-ha77mp9",
+      "project_id": "proj-1",
+      "title": "Optimize web socket telemetry compression",
+      "description": "Auto-generated workload spike task demonstrating the Workload Balancing & Red Burnout Pulse alert system.",
+      "status": "IN_PROGRESS",
+      "priority": "URGENT",
+      "due_date": "2026-09-20",
+      "assigned_to": "usr-2",
+      "order_index": 2,
+      "created_at": "2026-09-17T14:16:46.199Z",
+      "updated_at": "2026-09-17T14:34:09.696Z"
+    },
+    {
+      "id": "task-sim-d4qc6rb",
+      "project_id": "proj-1",
+      "title": "Implement real-time spectrogram latency benchmarking",
+      "description": "Auto-generated workload spike task demonstrating the Workload Balancing & Red Burnout Pulse alert system.",
+      "status": "IN_PROGRESS",
+      "priority": "URGENT",
+      "due_date": "2026-09-21",
+      "assigned_to": "usr-4",
+      "order_index": 3,
+      "created_at": "2026-09-17T14:16:46.202Z",
+      "updated_at": "2026-09-17T14:34:09.696Z"
+    },
+    {
+      "id": "task-sim-bgs838d",
+      "project_id": "proj-1",
+      "title": "Fix thread deadlock during audio packet deserialization",
+      "description": "Auto-generated workload spike task demonstrating the Workload Balancing & Red Burnout Pulse alert system.",
+      "status": "IN_PROGRESS",
+      "priority": "URGENT",
+      "due_date": "2026-09-22",
+      "assigned_to": "usr-3",
+      "order_index": 4,
+      "created_at": "2026-09-17T14:16:46.204Z",
+      "updated_at": "2026-09-17T14:34:09.696Z"
+    },
+    {
+      "id": "task-sim-3micpvc",
+      "project_id": "proj-1",
+      "title": "Deploy mission-critical security patch to Edge node cluster",
+      "description": "Auto-generated workload spike task demonstrating the Workload Balancing & Red Burnout Pulse alert system.",
+      "status": "IN_PROGRESS",
+      "priority": "URGENT",
+      "due_date": "2026-09-23",
+      "assigned_to": "usr-2",
+      "order_index": 5,
+      "created_at": "2026-09-17T14:16:46.208Z",
+      "updated_at": "2026-09-17T14:34:09.696Z"
+    },
+    {
+      "id": "task-vaph6sqr3",
+      "project_id": "proj-1",
+      "title": "Verify End-to-End Task Creation Flow",
+      "description": "Verify End-to-End Task Creation Flow",
+      "status": "TODO",
+      "priority": "URGENT",
+      "due_date": "2026-09-20",
+      "assigned_to": "usr-1",
+      "order_index": 0,
+      "created_at": "2026-09-17T14:20:38.342Z",
+      "updated_at": "2026-09-17T14:20:38.342Z"
+    },
+    {
+      "id": "task-sim-noao9er",
+      "project_id": "proj-1",
+      "title": "Refactor high-throughput message streaming buffer",
+      "description": "Auto-generated workload spike task demonstrating the Workload Balancing & Red Burnout Pulse alert system.",
+      "status": "IN_PROGRESS",
+      "priority": "URGENT",
+      "due_date": "2026-09-18",
+      "assigned_to": "usr-4",
+      "subtasks": [
+        {
+          "id": "sub-sim-0-1",
+          "title": "Isolate bottlenecks and benchmark thread pool",
+          "completed": true
+        },
+        {
+          "id": "sub-sim-0-2",
+          "title": "Verify zero packet loss on high packet rates",
+          "completed": false
+        }
+      ],
+      "order_index": 0,
+      "created_at": "2026-09-17T14:32:55.459Z",
+      "updated_at": "2026-09-17T14:42:50.370Z"
+    },
+    {
+      "id": "task-sim-h0m3o6r",
+      "project_id": "proj-1",
+      "title": "Resolve race condition in worker event queue",
+      "description": "Auto-generated workload spike task demonstrating the Workload Balancing & Red Burnout Pulse alert system.",
+      "status": "IN_PROGRESS",
+      "priority": "URGENT",
+      "due_date": "2026-09-19",
+      "assigned_to": "usr-1",
+      "subtasks": [
+        {
+          "id": "sub-sim-1-1",
+          "title": "Isolate bottlenecks and benchmark thread pool",
+          "completed": false
+        },
+        {
+          "id": "sub-sim-1-2",
+          "title": "Verify zero packet loss on high packet rates",
+          "completed": false
+        }
+      ],
+      "order_index": 1,
+      "created_at": "2026-09-17T14:32:55.474Z",
+      "updated_at": "2026-09-17T14:32:55.474Z"
+    },
+    {
+      "id": "task-sim-qiiw8vs",
+      "project_id": "proj-1",
+      "title": "Optimize web socket telemetry compression",
+      "description": "Auto-generated workload spike task demonstrating the Workload Balancing & Red Burnout Pulse alert system.",
+      "status": "IN_PROGRESS",
+      "priority": "URGENT",
+      "due_date": "2026-09-20",
+      "assigned_to": "usr-1",
+      "subtasks": [
+        {
+          "id": "sub-sim-2-1",
+          "title": "Isolate bottlenecks and benchmark thread pool",
+          "completed": false
+        },
+        {
+          "id": "sub-sim-2-2",
+          "title": "Verify zero packet loss on high packet rates",
+          "completed": false
+        }
+      ],
+      "order_index": 2,
+      "created_at": "2026-09-17T14:32:55.488Z",
+      "updated_at": "2026-09-17T14:32:55.488Z"
+    },
+    {
+      "id": "task-sim-nw496t6",
+      "project_id": "proj-1",
+      "title": "Implement real-time spectrogram latency benchmarking",
+      "description": "Auto-generated workload spike task demonstrating the Workload Balancing & Red Burnout Pulse alert system.",
+      "status": "IN_PROGRESS",
+      "priority": "URGENT",
+      "due_date": "2026-09-21",
+      "assigned_to": "usr-1",
+      "subtasks": [
+        {
+          "id": "sub-sim-3-1",
+          "title": "Isolate bottlenecks and benchmark thread pool",
+          "completed": false
+        },
+        {
+          "id": "sub-sim-3-2",
+          "title": "Verify zero packet loss on high packet rates",
+          "completed": false
+        }
+      ],
+      "order_index": 3,
+      "created_at": "2026-09-17T14:32:55.498Z",
+      "updated_at": "2026-09-17T14:32:55.498Z"
+    },
+    {
+      "id": "task-sim-38w0cct",
+      "project_id": "proj-1",
+      "title": "Fix thread deadlock during audio packet deserialization",
+      "description": "Auto-generated workload spike task demonstrating the Workload Balancing & Red Burnout Pulse alert system.",
+      "status": "IN_PROGRESS",
+      "priority": "URGENT",
+      "due_date": "2026-09-22",
+      "assigned_to": "usr-1",
+      "subtasks": [
+        {
+          "id": "sub-sim-4-1",
+          "title": "Isolate bottlenecks and benchmark thread pool",
+          "completed": false
+        },
+        {
+          "id": "sub-sim-4-2",
+          "title": "Verify zero packet loss on high packet rates",
+          "completed": false
+        }
+      ],
+      "order_index": 4,
+      "created_at": "2026-09-17T14:32:55.503Z",
+      "updated_at": "2026-09-17T14:32:55.503Z"
+    },
+    {
+      "id": "task-sim-2ds1bq5",
+      "project_id": "proj-1",
+      "title": "Deploy mission-critical security patch to Edge node cluster",
+      "description": "Auto-generated workload spike task demonstrating the Workload Balancing & Red Burnout Pulse alert system.",
+      "status": "IN_PROGRESS",
+      "priority": "URGENT",
+      "due_date": "2026-09-23",
+      "assigned_to": "usr-1",
+      "subtasks": [
+        {
+          "id": "sub-sim-5-1",
+          "title": "Isolate bottlenecks and benchmark thread pool",
+          "completed": false
+        },
+        {
+          "id": "sub-sim-5-2",
+          "title": "Verify zero packet loss on high packet rates",
+          "completed": false
+        }
+      ],
+      "order_index": 5,
+      "created_at": "2026-09-17T14:32:55.511Z",
+      "updated_at": "2026-09-17T14:32:55.511Z"
+    }
+  ],
+  "task_subtasks": []
+}

@@ -1,0 +1,14 @@
+{
+  "name": "quantiphi-kanban-task-manager",
+  "version": "1.0.0",
+  "description": "Streamlined Kanban Task Management App with Workload Balancing and Burnout Radar",
+  "scripts": {
+    "install-all": "cd server && npm install && cd ../client && npm install",
+    "server": "cd server && npm run dev",
+    "client": "cd client && npm run dev",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
