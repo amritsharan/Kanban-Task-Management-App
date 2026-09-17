@@ -5,9 +5,10 @@ import {
   FolderPlus, 
   Flame, 
   Layers, 
-  CheckCircle2, 
-  Activity,
-  Sparkles 
+  BarChart3,
+  Download,
+  Keyboard,
+  Wand2
 } from 'lucide-react';
 
 export default function Navbar({
@@ -17,13 +18,16 @@ export default function Navbar({
   onOpenNewProjectModal,
   onOpenMembersModal,
   onOpenNewTaskModal,
+  onOpenAnalyticsModal,
+  onOpenExportModal,
+  onOpenShortcutsModal,
   onSimulateBurnout,
   isBurnoutPresent,
   overloadedUserName
 }) {
   return (
-    <header className="sticky top-0 z-30 bg-[#0c1222]/90 backdrop-blur-md border-b border-slate-800/80 px-4 sm:px-8 py-3.5 transition-all">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <header className="sticky top-0 z-30 bg-[#0c1222]/90 backdrop-blur-md border-b border-slate-800/80 px-4 sm:px-8 py-3 transition-all">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-3">
         
         {/* Brand & Project Switcher */}
         <div className="flex items-center gap-4 flex-wrap">
@@ -73,9 +77,9 @@ export default function Navbar({
           </div>
         </div>
 
-        {/* Action Controls & Burnout Status */}
-        <div className="flex items-center gap-2.5 flex-wrap">
-          {/* Burnout Simulation Quick Demo Button */}
+        {/* Action Controls & Views */}
+        <div className="flex items-center gap-2 flex-wrap">
+          {/* Burnout Simulation Button */}
           <button
             onClick={onSimulateBurnout}
             title="Simulate Overload: Assigns > 5 In-Progress tasks to trigger pulsating red avatar"
@@ -89,19 +93,50 @@ export default function Navbar({
             <span>{isBurnoutPresent ? `Burnout Warning Active!` : 'Simulate Overload (>5 tasks)'}</span>
           </button>
 
+          {/* Analytics View Button */}
+          <button
+            onClick={onOpenAnalyticsModal}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium bg-slate-800/90 hover:bg-slate-700/90 text-slate-200 border border-slate-700/80 transition-all"
+            title="Sprint Analytics & Velocity (Shortcut: A)"
+          >
+            <BarChart3 className="w-3.5 h-3.5 text-cyan-400" />
+            <span className="hidden sm:inline">Analytics</span>
+          </button>
+
+          {/* Export Button */}
+          <button
+            onClick={onOpenExportModal}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium bg-slate-800/90 hover:bg-slate-700/90 text-slate-200 border border-slate-700/80 transition-all"
+            title="Export to CSV/JSON (Shortcut: E)"
+          >
+            <Download className="w-3.5 h-3.5 text-emerald-400" />
+            <span className="hidden sm:inline">Export</span>
+          </button>
+
           {/* Manage Team Members Button */}
           <button
             onClick={onOpenMembersModal}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800/90 hover:bg-slate-700/90 text-slate-200 border border-slate-700/80 hover:border-slate-600 transition-all shadow-sm"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium bg-slate-800/90 hover:bg-slate-700/90 text-slate-200 border border-slate-700/80 transition-all"
+            title="Manage Team & Permissions (Shortcut: T)"
           >
             <Users className="w-3.5 h-3.5 text-indigo-400" />
-            <span>Team & Roles</span>
+            <span className="hidden sm:inline">Team</span>
+          </button>
+
+          {/* Keyboard Shortcuts Button */}
+          <button
+            onClick={onOpenShortcutsModal}
+            className="p-1.5 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-slate-400 hover:text-white border border-slate-700/80 transition-all"
+            title="Keyboard Shortcuts Guide (Shortcut: ?)"
+          >
+            <Keyboard className="w-4 h-4" />
           </button>
 
           {/* New Task Button */}
           <button
             onClick={onOpenNewTaskModal}
             className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white shadow-md shadow-indigo-600/30 transition-all hover:scale-[1.02] active:scale-[0.98]"
+            title="Create Task (Shortcut: N)"
           >
             <Plus className="w-4 h-4 stroke-[2.5]" />
             <span>New Task</span>

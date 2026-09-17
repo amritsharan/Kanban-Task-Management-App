@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db');
 
-// GET tasks with filtering (projectId, priority, status, assignedTo, search)
+// GET tasks with filtering
 router.get('/', (req, res) => {
   try {
     const { projectId, priority, status, assignedTo, search } = req.query;
@@ -19,7 +19,7 @@ router.get('/', (req, res) => {
   }
 });
 
-// GET single task
+// GET single task with full details, comments, and audit activity history
 router.get('/:id', (req, res) => {
   try {
     const task = db.getTaskById(req.params.id);
@@ -35,7 +35,7 @@ router.get('/:id', (req, res) => {
 // CREATE task
 router.post('/', (req, res) => {
   try {
-    const { project_id, title, description, priority, due_date, assigned_to, status, subtasks } = req.body;
+    const { project_id, title, description, priority, due_date, assigned_to, status, subtasks, tags } = req.body;
 
     if (!project_id) {
       return res.status(400).json({ success: false, error: 'project_id is required' });
@@ -61,6 +61,7 @@ router.post('/', (req, res) => {
       due_date: due_date || null,
       assigned_to: assigned_to || null,
       subtasks: Array.isArray(subtasks) ? subtasks : [],
+      tags: Array.isArray(tags) ? tags : [],
       order_index: 0,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
@@ -76,7 +77,7 @@ router.post('/', (req, res) => {
 // UPDATE entire task
 router.put('/:id', (req, res) => {
   try {
-    const { title, description, priority, due_date, assigned_to, status, subtasks } = req.body;
+    const { title, description, priority, due_date, assigned_to, status, subtasks, tags } = req.body;
     const task = db.getTaskById(req.params.id);
 
     if (!task) {
@@ -96,10 +97,27 @@ router.put('/:id', (req, res) => {
       due_date: due_date !== undefined ? due_date : task.due_date,
       assigned_to: assigned_to !== undefined ? (assigned_to === '' ? null : assigned_to) : task.assigned_to,
       status: taskStatus,
-      subtasks: subtasks !== undefined ? subtasks : task.subtasks
+      subtasks: subtasks !== undefined ? subtasks : task.subtasks,
+      tags: tags !== undefined ? tags : task.tags
     });
 
     res.json({ success: true, data: updated });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// ADD COMMENT TO TASK
+router.post('/:id/comments', (req, res) => {
+  try {
+    const { user_id, user_name, user_avatar, text } = req.body;
+    if (!text || text.trim() === '') {
+      return res.status(400).json({ success: false, error: 'Comment text is required' });
+    }
+
+    const comment = db.addComment(req.params.id, user_id, user_name, user_avatar, text);
+    const updatedTask = db.getTaskById(req.params.id);
+    res.status(201).json({ success: true, data: comment, task: updatedTask });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }
@@ -218,7 +236,7 @@ router.delete('/:id', (req, res) => {
   }
 });
 
-// SIMULATE / DEMO BURNOUT: Add 6 In-Progress tasks to a user to showcase the >5 red pulse burnout warning
+// SIMULATE BURNOUT
 router.post('/simulate-burnout', (req, res) => {
   try {
     const { projectId, userId } = req.body;
@@ -250,6 +268,7 @@ router.post('/simulate-burnout', (req, res) => {
           { id: 'sub-sim-' + idx + '-1', title: 'Isolate bottlenecks and benchmark thread pool', completed: false },
           { id: 'sub-sim-' + idx + '-2', title: 'Verify zero packet loss on high packet rates', completed: false }
         ],
+        tags: ['Performance', 'Urgent'],
         order_index: idx,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()

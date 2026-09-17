@@ -111,7 +111,7 @@ router.delete('/:id/members/:userId', (req, res) => {
   }
 });
 
-// WORKLOAD BALANCING: Server-side calculation of user workload & burnout status
+// WORKLOAD BALANCING
 router.get('/:id/workload', (req, res) => {
   try {
     const workload = db.getWorkload(req.params.id);
@@ -121,7 +121,7 @@ router.get('/:id/workload', (req, res) => {
   }
 });
 
-// SMART AUTO-REBALANCE ENDPOINT
+// SMART AUTO-REBALANCE
 router.post('/:id/auto-rebalance', (req, res) => {
   try {
     const result = db.autoRebalanceWorkload(req.params.id);
@@ -130,6 +130,58 @@ router.post('/:id/auto-rebalance', (req, res) => {
       success: true,
       ...result,
       workload: updatedWorkload
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// ANALYTICS & VELOCITY METRICS
+router.get('/:id/analytics', (req, res) => {
+  try {
+    const analytics = db.getProjectAnalytics(req.params.id);
+    res.json({ success: true, data: analytics });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// EXPORT TO CSV OR JSON
+router.get('/:id/export', (req, res) => {
+  try {
+    const format = (req.query.format || 'json').toLowerCase();
+    const tasks = db.getTasks({ projectId: req.params.id });
+    const project = db.getProjectById(req.params.id);
+
+    if (format === 'csv') {
+      const headers = ['ID', 'Title', 'Description', 'Status', 'Priority', 'Due Date', 'Assignee', 'Subtasks Total', 'Subtasks Done', 'Created At'];
+      const rows = tasks.map(t => [
+        `"${t.id}"`,
+        `"${(t.title || '').replace(/"/g, '""')}"`,
+        `"${(t.description || '').replace(/"/g, '""')}"`,
+        `"${t.status}"`,
+        `"${t.priority}"`,
+        `"${t.due_date || ''}"`,
+        `"${t.assignee_name || 'Unassigned'}"`,
+        (t.subtasks || []).length,
+        (t.subtasks || []).filter(s => s.completed).length,
+        `"${t.created_at}"`
+      ]);
+
+      const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+      res.setHeader('Content-Type', 'text/csv');
+      res.setHeader('Content-Disposition', `attachment; filename="${project?.name || 'kanban'}-export.csv"`);
+      return res.send(csvContent);
+    }
+
+    // Default JSON export
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Content-Disposition', `attachment; filename="${project?.name || 'kanban'}-export.json"`);
+    res.json({
+      project,
+      exportedAt: new Date().toISOString(),
+      taskCount: tasks.length,
+      tasks
     });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });

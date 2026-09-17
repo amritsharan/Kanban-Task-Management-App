@@ -10,7 +10,8 @@ class RelationalDatabase {
       projects: [],
       project_members: [],
       tasks: [],
-      task_subtasks: []
+      activities: [],
+      comments: []
     };
     this.load();
   }
@@ -25,7 +26,8 @@ class RelationalDatabase {
           projects: parsed.projects || [],
           project_members: parsed.project_members || [],
           tasks: parsed.tasks || [],
-          task_subtasks: parsed.task_subtasks || []
+          activities: parsed.activities || [],
+          comments: parsed.comments || []
         };
         console.log('✅ Loaded existing relational database file.');
         return;
@@ -43,6 +45,21 @@ class RelationalDatabase {
     } catch (e) {
       console.error('Failed to persist database:', e);
     }
+  }
+
+  logActivity(taskId, projectId, action, userName = 'System', userAvatar = null) {
+    const act = {
+      id: 'act-' + Math.random().toString(36).substr(2, 9),
+      task_id: taskId,
+      project_id: projectId,
+      user_name: userName,
+      user_avatar: userAvatar,
+      action,
+      timestamp: new Date().toISOString()
+    };
+    this.data.activities.unshift(act);
+    if (this.data.activities.length > 500) this.data.activities.pop();
+    this.save();
   }
 
   seed() {
@@ -92,6 +109,7 @@ class RelationalDatabase {
           { id: 'sub-1', title: 'Define tables with foreign keys', completed: true },
           { id: 'sub-2', title: 'Add B-tree indexes for status and priority', completed: true }
         ],
+        tags: ['Backend', 'PostgreSQL', 'Performance'],
         order_index: 0,
         created_at: new Date(Date.now() - 86400000 * 4).toISOString(),
         updated_at: new Date().toISOString()
@@ -109,6 +127,7 @@ class RelationalDatabase {
           { id: 'sub-3', title: 'Create JWT signing middleware', completed: true },
           { id: 'sub-4', title: 'Attach role guard interceptors', completed: true }
         ],
+        tags: ['Security', 'Auth', 'API'],
         order_index: 1,
         created_at: new Date(Date.now() - 86400000 * 3).toISOString(),
         updated_at: new Date().toISOString()
@@ -127,6 +146,7 @@ class RelationalDatabase {
           { id: 'sub-6', title: 'Add CSS drop zone highlight animations', completed: true },
           { id: 'sub-7', title: 'Optimistic state sync with backend API', completed: false }
         ],
+        tags: ['Frontend', 'UI/UX', 'Kanban'],
         order_index: 0,
         created_at: new Date(Date.now() - 86400000 * 2).toISOString(),
         updated_at: new Date().toISOString()
@@ -145,6 +165,7 @@ class RelationalDatabase {
           { id: 'sub-9', title: 'Pulsing red CSS animation keyframes', completed: true },
           { id: 'sub-10', title: 'Smart auto-rebalance algorithm', completed: false }
         ],
+        tags: ['Algorithms', 'Workload', 'GenAI'],
         order_index: 1,
         created_at: new Date(Date.now() - 86400000 * 2).toISOString(),
         updated_at: new Date().toISOString()
@@ -162,6 +183,7 @@ class RelationalDatabase {
           { id: 'sub-11', title: 'Token bucket rate-limit filter', completed: false },
           { id: 'sub-12', title: 'Global error interceptor', completed: true }
         ],
+        tags: ['Middleware', 'Resilience', 'Express'],
         order_index: 2,
         created_at: new Date(Date.now() - 86400000 * 1).toISOString(),
         updated_at: new Date().toISOString()
@@ -179,6 +201,7 @@ class RelationalDatabase {
           { id: 'sub-13', title: 'Benchmark FFT latency on 16kHz audio', completed: false },
           { id: 'sub-14', title: 'Optimize buffer chunking sizes', completed: false }
         ],
+        tags: ['Audio ML', 'Telemetry', 'C++'],
         order_index: 3,
         created_at: new Date(Date.now() - 86400000 * 1).toISOString(),
         updated_at: new Date().toISOString()
@@ -193,6 +216,7 @@ class RelationalDatabase {
         due_date: getOffsetDate(5),
         assigned_to: 'usr-1',
         subtasks: [],
+        tags: ['WebSockets', 'Realtime'],
         order_index: 0,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
@@ -207,6 +231,7 @@ class RelationalDatabase {
         due_date: getOffsetDate(7),
         assigned_to: 'usr-5',
         subtasks: [],
+        tags: ['QA', 'Testing', 'Cypress'],
         order_index: 1,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
@@ -221,16 +246,59 @@ class RelationalDatabase {
         due_date: getOffsetDate(10),
         assigned_to: 'usr-3',
         subtasks: [],
+        tags: ['Reporting', 'Export'],
         order_index: 2,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
       }
     ];
 
+    this.data.comments = [
+      {
+        id: 'comm-1',
+        task_id: 'task-104',
+        user_id: 'usr-1',
+        user_name: 'Alex Rivera',
+        user_avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
+        text: 'Let us make sure the red pulsing animation has an accessible fallback with text badge for color-blind teammates.',
+        timestamp: new Date(Date.now() - 3600000 * 5).toISOString()
+      },
+      {
+        id: 'comm-2',
+        task_id: 'task-104',
+        user_id: 'usr-2',
+        user_name: 'Priya Sharma',
+        user_avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80',
+        text: 'Added! The smart auto-rebalance algorithm also kicks in with one click.',
+        timestamp: new Date(Date.now() - 3600000 * 2).toISOString()
+      }
+    ];
+
+    this.data.activities = [
+      {
+        id: 'act-1',
+        task_id: 'task-104',
+        project_id: 'proj-1',
+        user_name: 'Priya Sharma',
+        user_avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80',
+        action: 'moved task to IN_PROGRESS',
+        timestamp: new Date(Date.now() - 3600000 * 3).toISOString()
+      },
+      {
+        id: 'act-2',
+        task_id: 'task-101',
+        project_id: 'proj-1',
+        user_name: 'Alex Rivera',
+        user_avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
+        action: 'completed task and marked as DONE',
+        timestamp: new Date(Date.now() - 86400000 * 2).toISOString()
+      }
+    ];
+
     console.log('Seeded database with initial records.');
   }
 
-  // Helper query methods
+  // Helpers
   getUsers() {
     return [...this.data.users];
   }
@@ -328,6 +396,7 @@ class RelationalDatabase {
       return {
         ...t,
         subtasks: t.subtasks || [],
+        tags: t.tags || [],
         assignee_name: user ? user.name : null,
         assignee_avatar: user ? user.avatar_url : null,
         assignee_email: user ? user.email : null,
@@ -367,9 +436,15 @@ class RelationalDatabase {
     const task = this.data.tasks.find(t => t.id === id);
     if (!task) return null;
     const user = task.assigned_to ? this.getUserById(task.assigned_to) : null;
+    const comments = this.data.comments.filter(c => c.task_id === id);
+    const activities = this.data.activities.filter(a => a.task_id === id);
+
     return {
       ...task,
       subtasks: task.subtasks || [],
+      tags: task.tags || [],
+      comments: comments || [],
+      activities: activities || [],
       assignee_name: user ? user.name : null,
       assignee_avatar: user ? user.avatar_url : null,
       assignee_email: user ? user.email : null
@@ -378,7 +453,9 @@ class RelationalDatabase {
 
   createTask(task) {
     if (!task.subtasks) task.subtasks = [];
+    if (!task.tags) task.tags = [];
     this.data.tasks.push(task);
+    this.logActivity(task.id, task.project_id, `created task "${task.title}"`);
     this.save();
     return this.getTaskById(task.id);
   }
@@ -386,21 +463,49 @@ class RelationalDatabase {
   updateTask(id, updates) {
     const idx = this.data.tasks.findIndex(t => t.id === id);
     if (idx === -1) return null;
+    
+    const prevStatus = this.data.tasks[idx].status;
     this.data.tasks[idx] = {
       ...this.data.tasks[idx],
       ...updates,
       updated_at: new Date().toISOString()
     };
+
+    if (updates.status && updates.status !== prevStatus) {
+      this.logActivity(id, this.data.tasks[idx].project_id, `moved status from ${prevStatus} to ${updates.status}`);
+    }
+
     this.save();
     return this.getTaskById(id);
   }
 
   deleteTask(id) {
-    const initialLen = this.data.tasks.length;
+    const task = this.data.tasks.find(t => t.id === id);
+    if (!task) return false;
     this.data.tasks = this.data.tasks.filter(t => t.id !== id);
-    if (this.data.tasks.length === initialLen) return false;
+    this.data.comments = this.data.comments.filter(c => c.task_id !== id);
+    this.data.activities = this.data.activities.filter(a => a.task_id !== id);
     this.save();
     return true;
+  }
+
+  addComment(taskId, userId, userName, userAvatar, text) {
+    const comment = {
+      id: 'comm-' + Math.random().toString(36).substr(2, 9),
+      task_id: taskId,
+      user_id: userId || 'usr-anon',
+      user_name: userName || 'Team Member',
+      user_avatar: userAvatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(userName || 'User')}`,
+      text: text.trim(),
+      timestamp: new Date().toISOString()
+    };
+    this.data.comments.push(comment);
+    const task = this.data.tasks.find(t => t.id === taskId);
+    if (task) {
+      this.logActivity(taskId, task.project_id, `commented: "${text.slice(0, 30)}..."`, userName, userAvatar);
+    }
+    this.save();
+    return comment;
   }
 
   getColumnCounters(projectId) {
@@ -440,8 +545,42 @@ class RelationalDatabase {
     }).sort((a, b) => b.in_progress_count - a.in_progress_count);
   }
 
-  // SMART AUTO-REBALANCE ALGORITHM:
-  // Redistributes In-Progress tasks from overloaded users (>5 tasks) to underutilized members (<=4 tasks)
+  // ANALYTICS & VELOCITY AGGREGATION
+  getProjectAnalytics(projectId) {
+    const tasks = this.data.tasks.filter(t => t.project_id === projectId);
+    const total = tasks.length;
+    const completed = tasks.filter(t => t.status === 'DONE').length;
+    const inProgress = tasks.filter(t => t.status === 'IN_PROGRESS').length;
+    const todo = tasks.filter(t => t.status === 'TODO').length;
+
+    const completionRate = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+    const now = new Date();
+    const overdue = tasks.filter(t => t.status !== 'DONE' && t.due_date && new Date(t.due_date) < now).length;
+    const onTrack = total - overdue - completed;
+
+    const priorityCounts = {
+      URGENT: tasks.filter(t => t.priority === 'URGENT').length,
+      HIGH: tasks.filter(t => t.priority === 'HIGH').length,
+      MEDIUM: tasks.filter(t => t.priority === 'MEDIUM').length,
+      LOW: tasks.filter(t => t.priority === 'LOW').length
+    };
+
+    const workload = this.getWorkload(projectId);
+
+    return {
+      total,
+      completed,
+      inProgress,
+      todo,
+      completionRate,
+      overdue,
+      onTrack: Math.max(0, onTrack),
+      priorityCounts,
+      workload
+    };
+  }
+
   autoRebalanceWorkload(projectId) {
     const workload = this.getWorkload(projectId);
     const overloaded = workload.filter(u => u.in_progress_count > 5);
@@ -455,13 +594,12 @@ class RelationalDatabase {
       .sort((a, b) => a.in_progress_count - b.in_progress_count);
 
     if (availableMembers.length === 0) {
-      // If all members are busy, include any non-viewer member
       availableMembers = workload.filter(u => u.role !== 'Viewer');
     }
 
     let memberIndex = 0;
     for (const overloadedUser of overloaded) {
-      let excessCount = overloadedUser.in_progress_count - 5; // keep max 5 to clear burnout
+      let excessCount = overloadedUser.in_progress_count - 5;
       const userInProgressTasks = this.data.tasks.filter(
         t => t.project_id === projectId && t.assigned_to === overloadedUser.id && t.status === 'IN_PROGRESS'
       );
@@ -471,9 +609,14 @@ class RelationalDatabase {
         const targetMember = availableMembers[memberIndex % availableMembers.length];
         memberIndex++;
 
-        // Update task assignment
         taskToReassign.assigned_to = targetMember.id;
         taskToReassign.updated_at = new Date().toISOString();
+
+        this.logActivity(
+          taskToReassign.id,
+          projectId,
+          `reassigned from ${overloadedUser.name} to ${targetMember.name} (Auto-Rebalance)`
+        );
 
         reassignments.push({
           taskId: taskToReassign.id,

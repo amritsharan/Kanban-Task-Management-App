@@ -34,6 +34,13 @@ export const api = {
     return data;
   },
 
+  getAnalytics: async (projectId) => {
+    const res = await fetch(`${API_BASE}/projects/${projectId}/analytics`);
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to fetch analytics');
+    return data.data;
+  },
+
   // Members
   getMembers: async (projectId) => {
     const res = await fetch(`${API_BASE}/projects/${projectId}/members`);
@@ -113,6 +120,13 @@ export const api = {
     };
   },
 
+  getTaskDetails: async (taskId) => {
+    const res = await fetch(`${API_BASE}/tasks/${taskId}`);
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to fetch task');
+    return data.data;
+  },
+
   createTask: async (payload) => {
     const res = await fetch(`${API_BASE}/tasks`, {
       method: 'POST',
@@ -153,6 +167,17 @@ export const api = {
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Failed to toggle subtask');
     return data.data;
+  },
+
+  addComment: async (taskId, payload) => {
+    const res = await fetch(`${API_BASE}/tasks/${taskId}/comments`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to add comment');
+    return data;
   },
 
   generateSubtasks: async (title) => {

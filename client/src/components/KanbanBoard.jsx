@@ -38,11 +38,11 @@ export default function KanbanBoard({
   onEditTask,
   onDeleteTask,
   onToggleSubtask,
+  onOpenDetails,
   onOpenNewTaskModal
 }) {
   const [dragOverColumn, setDragOverColumn] = useState(null);
 
-  // Set of user IDs experiencing burnout
   const burnoutUserIds = new Set(
     workload.filter(u => u.is_burnout_warning || u.in_progress_count > 5).map(u => u.id)
   );
@@ -67,8 +67,6 @@ export default function KanbanBoard({
     const taskId = e.dataTransfer.getData('text/plain');
     if (taskId) {
       onMoveTask(taskId, targetStatus);
-
-      // Trigger celebratory confetti when moving task to DONE
       if (targetStatus === 'DONE') {
         confetti({
           particleCount: 50,
@@ -103,7 +101,6 @@ export default function KanbanBoard({
             <div className={`p-4 border-b border-slate-800/80 bg-gradient-to-b ${column.headerAccent} rounded-t-2xl`}>
               <div className="flex items-center justify-between">
                 
-                {/* Title & Icon */}
                 <div className="flex items-center gap-2.5">
                   <span className={`w-2.5 h-2.5 rounded-full ${column.dotColor}`} />
                   <h3 className="font-bold text-sm text-slate-100 tracking-tight flex items-center gap-2">
@@ -111,7 +108,6 @@ export default function KanbanBoard({
                   </h3>
                 </div>
 
-                {/* Counter Badge */}
                 <div className="flex items-center gap-2">
                   <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold border shadow-inner ${column.badgeColor}`}>
                     {taskCount} {taskCount === 1 ? 'task' : 'tasks'}
@@ -139,6 +135,7 @@ export default function KanbanBoard({
                     onDelete={onDeleteTask}
                     onMoveStatus={onMoveTask}
                     onToggleSubtask={onToggleSubtask}
+                    onOpenDetails={onOpenDetails}
                     isAssigneeOverloaded={task.assigned_to ? burnoutUserIds.has(task.assigned_to) : false}
                   />
                 ))

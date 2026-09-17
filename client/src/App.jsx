@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Navbar from './components/Navbar';
 import TeamWorkloadBar from './components/TeamWorkloadBar';
 import FilterBar from './components/FilterBar';
@@ -6,6 +6,10 @@ import KanbanBoard from './components/KanbanBoard';
 import TaskModal from './components/TaskModal';
 import ProjectMembersModal from './components/ProjectMembersModal';
 import ProjectModal from './components/ProjectModal';
+import AnalyticsModal from './components/AnalyticsModal';
+import TaskDetailDrawer from './components/TaskDetailDrawer';
+import ExportModal from './components/ExportModal';
+import ShortcutsModal from './components/ShortcutsModal';
 import Toast from './components/Toast';
 import { api } from './services/api';
 import { Sparkles, RefreshCw } from 'lucide-react';
@@ -33,6 +37,10 @@ export default function App() {
   const [defaultColumnStatus, setDefaultColumnStatus] = useState('TODO');
   const [isMembersModalOpen, setIsMembersModalOpen] = useState(false);
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
+  const [isAnalyticsModalOpen, setIsAnalyticsModalOpen] = useState(false);
+  const [isExportModalOpen, setIsExportModalOpen] = useState(false);
+  const [isShortcutsModalOpen, setIsShortcutsModalOpen] = useState(false);
+  const [selectedTaskDetailId, setSelectedTaskDetailId] = useState(null);
 
   // Toast notifications
   const [toast, setToast] = useState(null);
@@ -69,7 +77,7 @@ export default function App() {
     loadInitialData();
   }, []);
 
-  // Fetch tasks, members, and workload when currentProject or filters change
+  // Refresh project data
   const refreshProjectData = useCallback(async () => {
     if (!currentProject?.id) return;
 
@@ -98,6 +106,54 @@ export default function App() {
     refreshProjectData();
   }, [refreshProjectData]);
 
+  // Global Keyboard Shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      // Ignore when user is actively typing in an input or textarea
+      if (['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) {
+        if (e.key === 'Escape') {
+          e.target.blur();
+        }
+        return;
+      }
+
+      if (e.key === 'n' || e.key === 'N') {
+        e.preventDefault();
+        handleOpenNewTask('TODO');
+      } else if (e.key === '/') {
+        e.preventDefault();
+        const searchInput = document.querySelector('input[placeholder*="Filter tasks"]');
+        if (searchInput) searchInput.focus();
+      } else if (e.key === 'a' || e.key === 'A') {
+        e.preventDefault();
+        setIsAnalyticsModalOpen(true);
+      } else if (e.key === 'e' || e.key === 'E') {
+        e.preventDefault();
+        setIsExportModalOpen(true);
+      } else if (e.key === 't' || e.key === 'T') {
+        e.preventDefault();
+        setIsMembersModalOpen(true);
+      } else if (e.key === 'r' || e.key === 'R') {
+        e.preventDefault();
+        handleAutoRebalance();
+      } else if (e.key === '?') {
+        e.preventDefault();
+        setIsShortcutsModalOpen(true);
+      } else if (e.key === 'Escape') {
+        setIsTaskModalOpen(false);
+        setIsMembersModalOpen(false);
+        setIsProjectModalOpen(false);
+        setIsAnalyticsModalOpen(false);
+        setIsExportModalOpen(false);
+        setIsShortcutsModalOpen(false);
+        setSelectedTaskDetailId(null);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [currentProject?.id]);
+
   // Handle Task Drag & Drop / Move
   const handleMoveTask = async (taskId, newStatus) => {
     setTasks(prev => prev.map(t => t.id === taskId ? { ...t, status: newStatus } : t));
@@ -115,7 +171,6 @@ export default function App() {
   // Handle Toggle Subtask
   const handleToggleSubtask = async (taskId, subtaskId) => {
     try {
-      // Optimistic update
       setTasks(prev => prev.map(t => {
         if (t.id === taskId) {
           const subtasks = (t.subtasks || []).map(st => st.id === subtaskId ? { ...st, completed: !st.completed } : st);
@@ -148,6 +203,7 @@ export default function App() {
     try {
       await api.deleteTask(taskId);
       showToast('Task deleted');
+      if (selectedTaskDetailId === taskId) setSelectedTaskDetailId(null);
       refreshProjectData();
     } catch (err) {
       showToast(err.message || 'Failed to delete task', 'error');
@@ -251,6 +307,9 @@ export default function App() {
         onOpenNewProjectModal={() => setIsProjectModalOpen(true)}
         onOpenMembersModal={() => setIsMembersModalOpen(true)}
         onOpenNewTaskModal={() => handleOpenNewTask('TODO')}
+        onOpenAnalyticsModal={() => setIsAnalyticsModalOpen(true)}
+        onOpenExportModal={() => setIsExportModalOpen(true)}
+        onOpenShortcutsModal={() => setIsShortcutsModalOpen(true)}
         onSimulateBurnout={handleSimulateBurnout}
         isBurnoutPresent={isBurnoutPresent}
         overloadedUserName={burnoutMembers[0]?.name}
@@ -323,14 +382,20 @@ export default function App() {
           onEditTask={handleOpenEditTask}
           onDeleteTask={handleDeleteTask}
           onToggleSubtask={handleToggleSubtask}
+          onOpenDetails={(taskId) => setSelectedTaskDetailId(taskId)}
           onOpenNewTaskModal={handleOpenNewTask}
         />
 
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-slate-900 bg-slate-950/60 py-4 px-8 text-center text-xs text-slate-500">
+      <footer className="border-t border-slate-900 bg-slate-950/60 py-4 px-8 text-center text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2 max-w-7xl mx-auto w-full">
         <p>Quantiphi TaskFlow • Vibe Coding Assessment • Real-time Kanban & Workload Balancing</p>
+        <div className="flex items-center gap-3">
+          <button onClick={() => setIsShortcutsModalOpen(true)} className="hover:text-indigo-400">Shortcuts (?)</button>
+          <span>•</span>
+          <button onClick={() => setIsExportModalOpen(true)} className="hover:text-indigo-400">Export Report</button>
+        </div>
       </footer>
 
       {/* Task Creation & Editing Modal */}
@@ -361,6 +426,38 @@ export default function App() {
         isOpen={isProjectModalOpen}
         onClose={() => setIsProjectModalOpen(false)}
         onCreateProject={handleCreateProject}
+      />
+
+      {/* Sprint Velocity & Analytics Dashboard Modal */}
+      <AnalyticsModal
+        isOpen={isAnalyticsModalOpen}
+        onClose={() => setIsAnalyticsModalOpen(false)}
+        projectId={currentProject?.id}
+        projectName={currentProject?.name}
+      />
+
+      {/* Task Detail Slide-Over Drawer with Comments & Audit Trail */}
+      <TaskDetailDrawer
+        isOpen={Boolean(selectedTaskDetailId)}
+        onClose={() => setSelectedTaskDetailId(null)}
+        taskId={selectedTaskDetailId}
+        onEditTask={handleOpenEditTask}
+        onToggleSubtask={handleToggleSubtask}
+        currentUser={members[0] || { name: 'Alex Rivera' }}
+      />
+
+      {/* Export & Report Generator Modal */}
+      <ExportModal
+        isOpen={isExportModalOpen}
+        onClose={() => setIsExportModalOpen(false)}
+        project={currentProject}
+        tasks={tasks}
+      />
+
+      {/* Keyboard Shortcuts Modal */}
+      <ShortcutsModal
+        isOpen={isShortcutsModalOpen}
+        onClose={() => setIsShortcutsModalOpen(false)}
       />
 
       {/* Notification Toast */}

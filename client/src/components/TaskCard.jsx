@@ -12,7 +12,8 @@ import {
   CheckCircle2,
   ListTodo,
   CheckSquare,
-  Square
+  Square,
+  MessageSquare
 } from 'lucide-react';
 
 const PRIORITY_STYLES = {
@@ -44,6 +45,7 @@ export default function TaskCard({
   onDelete,
   onMoveStatus,
   onToggleSubtask,
+  onOpenDetails,
   isAssigneeOverloaded
 }) {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
@@ -60,7 +62,6 @@ export default function TaskCard({
   };
 
   const dueInfo = formatDate(task.due_date);
-
   const subtasks = task.subtasks || [];
   const completedSubtasks = subtasks.filter(s => s.completed).length;
   const subtaskProgress = subtasks.length > 0 ? Math.round((completedSubtasks / subtasks.length) * 100) : 0;
@@ -72,7 +73,8 @@ export default function TaskCard({
         e.dataTransfer.setData('text/plain', task.id);
         e.dataTransfer.effectAllowed = 'move';
       }}
-      className={`glass-card group relative rounded-xl p-4 border-l-4 ${priorityStyle.border} hover:border-slate-600 transition-all cursor-grab active:cursor-grabbing select-none shadow-md`}
+      onClick={() => onOpenDetails && onOpenDetails(task.id)}
+      className={`glass-card group relative rounded-xl p-4 border-l-4 ${priorityStyle.border} hover:border-slate-600 transition-all cursor-pointer select-none shadow-md`}
     >
       {/* Card Header: Priority & Action Menu */}
       <div className="flex items-center justify-between gap-2 mb-2.5">
@@ -83,7 +85,10 @@ export default function TaskCard({
 
         <div className="relative">
           <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsMenuOpen(!isMenuOpen);
+            }}
             className="opacity-0 group-hover:opacity-100 p-1 rounded-md text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition-all"
           >
             <MoreVertical className="w-3.5 h-3.5" />
@@ -94,11 +99,15 @@ export default function TaskCard({
             <>
               <div 
                 className="fixed inset-0 z-40" 
-                onClick={() => setIsMenuOpen(false)} 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsMenuOpen(false);
+                }} 
               />
               <div className="absolute right-0 top-6 z-50 w-36 bg-slate-900 border border-slate-700 rounded-lg shadow-2xl py-1 text-xs text-slate-200 divide-y divide-slate-800">
                 <button
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
                     setIsMenuOpen(false);
                     onEdit(task);
                   }}
@@ -110,7 +119,8 @@ export default function TaskCard({
 
                 {task.status !== 'TODO' && (
                   <button
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.stopPropagation();
                       setIsMenuOpen(false);
                       onMoveStatus(task.id, task.status === 'DONE' ? 'IN_PROGRESS' : 'TODO');
                     }}
@@ -123,7 +133,8 @@ export default function TaskCard({
 
                 {task.status !== 'DONE' && (
                   <button
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.stopPropagation();
                       setIsMenuOpen(false);
                       onMoveStatus(task.id, task.status === 'TODO' ? 'IN_PROGRESS' : 'DONE');
                     }}
@@ -135,7 +146,8 @@ export default function TaskCard({
                 )}
 
                 <button
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
                     setIsMenuOpen(false);
                     onDelete(task.id);
                   }}
@@ -166,7 +178,10 @@ export default function TaskCard({
       {subtasks.length > 0 && (
         <div className="mb-3 bg-slate-950/50 p-2 rounded-lg border border-slate-800/80">
           <div 
-            onClick={() => setShowSubtasks(!showSubtasks)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowSubtasks(!showSubtasks);
+            }}
             className="flex items-center justify-between text-[11px] font-medium text-slate-300 cursor-pointer hover:text-white"
           >
             <div className="flex items-center gap-1.5">
@@ -176,7 +191,6 @@ export default function TaskCard({
             <span className="text-[10px] text-indigo-300 font-bold">{subtaskProgress}%</span>
           </div>
 
-          {/* Mini progress bar */}
           <div className="w-full h-1 bg-slate-800 rounded-full mt-1.5 overflow-hidden">
             <div 
               className="h-full bg-emerald-500 rounded-full transition-all duration-300"
@@ -184,7 +198,6 @@ export default function TaskCard({
             />
           </div>
 
-          {/* Expandable subtask items */}
           {showSubtasks && (
             <div className="mt-2 space-y-1.5 pt-1.5 border-t border-slate-800/60">
               {subtasks.map((st) => (
@@ -211,9 +224,8 @@ export default function TaskCard({
         </div>
       )}
 
-      {/* Card Footer: Due Date & Assignee */}
+      {/* Card Footer */}
       <div className="flex items-center justify-between gap-2 pt-2 border-t border-slate-800/60 mt-1">
-        {/* Due Date Indicator */}
         {dueInfo ? (
           <div
             className={`flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-md ${
@@ -230,7 +242,6 @@ export default function TaskCard({
           <span className="text-[11px] text-slate-500">No due date</span>
         )}
 
-        {/* Assignee Avatar with Workload Burnout Ring */}
         {task.assigned_to ? (
           <div className="flex items-center gap-1.5" title={`Assigned to ${task.assignee_name || 'Member'}`}>
             <div className="relative">
