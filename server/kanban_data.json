@@ -192,13 +192,13 @@
       "project_id": "proj-1",
       "title": "Real-time Telemetry Sync for Concurrent Sessions",
       "description": "Broadcast task updates across all connected team sessions with optimistic resolution.",
-      "status": "TODO",
+      "status": "IN_PROGRESS",
       "priority": "MEDIUM",
       "due_date": "2026-09-22",
       "assigned_to": "usr-1",
       "order_index": 0,
       "created_at": "2026-09-17T14:07:43.800Z",
-      "updated_at": "2026-09-17T14:07:43.800Z"
+      "updated_at": "2026-09-17T14:58:46.530Z"
     },
     {
       "id": "task-108",
@@ -211,7 +211,30 @@
       "assigned_to": "usr-5",
       "order_index": 1,
       "created_at": "2026-09-17T14:07:43.800Z",
-      "updated_at": "2026-09-17T14:07:43.800Z"
+      "updated_at": "2026-09-17T14:59:07.012Z",
+      "subtasks": [
+        {
+          "id": "sub-67n1o5",
+          "title": "Construct glassmorphic card container with Tailwind tokens",
+          "completed": false
+        },
+        {
+          "id": "sub-i256nk",
+          "title": "Attach drag-over drop target listeners with visual pulse",
+          "completed": false
+        },
+        {
+          "id": "sub-99cbo3",
+          "title": "Implement optimistic local UI update on card release",
+          "completed": false
+        },
+        {
+          "id": "sub-nl8i63",
+          "title": "Test responsive touch behavior across mobile & desktop",
+          "completed": false
+        }
+      ],
+      "tags": []
     },
     {
       "id": "task-109",
@@ -504,6 +527,16 @@
       "tags": []
     }
   ],
-  "activities": [],
+  "activities": [
+    {
+      "id": "act-6zbkw49lo",
+      "task_id": "task-107",
+      "project_id": "proj-1",
+      "user_name": "System",
+      "user_avatar": null,
+      "action": "moved status from TODO to IN_PROGRESS",
+      "timestamp": "2026-09-17T14:58:46.531Z"
+    }
+  ],
   "comments": []
 }

@@ -1,7 +1,7 @@
 import React from 'react';
-import { X, Download, FileSpreadsheet, FileJson, Printer, CheckCircle } from 'lucide-react';
+import { X, Download, FileSpreadsheet, FileJson, Printer, CheckCircle, FileText } from 'lucide-react';
 
-export default function ExportModal({ isOpen, onClose, project, tasks = [] }) {
+export default function ExportModal({ isOpen, onClose, project, tasks = [], onOpenSprintReport }) {
   if (!isOpen) return null;
 
   const handleExportCSV = () => {
@@ -40,8 +40,9 @@ export default function ExportModal({ isOpen, onClose, project, tasks = [] }) {
     onClose();
   };
 
-  const handlePrint = () => {
-    window.print();
+  const handleOpenReport = () => {
+    onClose();
+    if (onOpenSprintReport) onOpenSprintReport();
   };
 
   return (
@@ -66,10 +67,30 @@ export default function ExportModal({ isOpen, onClose, project, tasks = [] }) {
         </div>
 
         <div className="mt-5 space-y-3">
+          {/* Rich Printable Sprint Summary PDF */}
+          <button
+            onClick={handleOpenReport}
+            className="w-full flex items-center justify-between p-3.5 rounded-xl bg-slate-950/60 hover:bg-slate-800/80 border border-indigo-500/40 hover:border-indigo-400 transition-all text-left group shadow-lg shadow-indigo-950/40"
+          >
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-lg bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                <FileText className="w-5 h-5" />
+              </div>
+              <div>
+                <h4 className="text-xs font-bold text-white group-hover:text-indigo-300 flex items-center gap-1.5">
+                  <span>Executive PDF Sprint Summary</span>
+                  <span className="text-[9px] bg-indigo-500/20 text-indigo-300 px-1.5 py-0.5 rounded font-bold uppercase">Enhanced</span>
+                </h4>
+                <p className="text-[11px] text-slate-400">Formatted executive report with metrics, capacity & task breakdown</p>
+              </div>
+            </div>
+            <Printer className="w-4 h-4 text-indigo-400 group-hover:text-white" />
+          </button>
+
           {/* CSV Export */}
           <button
             onClick={handleExportCSV}
-            className="w-full flex items-center justify-between p-3.5 rounded-xl bg-slate-950/60 hover:bg-slate-800/80 border border-slate-800 hover:border-indigo-500/50 transition-all text-left group"
+            className="w-full flex items-center justify-between p-3.5 rounded-xl bg-slate-950/60 hover:bg-slate-800/80 border border-slate-800 hover:border-emerald-500/50 transition-all text-left group"
           >
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
@@ -86,7 +107,7 @@ export default function ExportModal({ isOpen, onClose, project, tasks = [] }) {
           {/* JSON Export */}
           <button
             onClick={handleExportJSON}
-            className="w-full flex items-center justify-between p-3.5 rounded-xl bg-slate-950/60 hover:bg-slate-800/80 border border-slate-800 hover:border-indigo-500/50 transition-all text-left group"
+            className="w-full flex items-center justify-between p-3.5 rounded-xl bg-slate-950/60 hover:bg-slate-800/80 border border-slate-800 hover:border-blue-500/50 transition-all text-left group"
           >
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-lg bg-blue-500/10 text-blue-400 border border-blue-500/20">
@@ -98,23 +119,6 @@ export default function ExportModal({ isOpen, onClose, project, tasks = [] }) {
               </div>
             </div>
             <Download className="w-4 h-4 text-slate-500 group-hover:text-white" />
-          </button>
-
-          {/* Printable Report */}
-          <button
-            onClick={handlePrint}
-            className="w-full flex items-center justify-between p-3.5 rounded-xl bg-slate-950/60 hover:bg-slate-800/80 border border-slate-800 hover:border-indigo-500/50 transition-all text-left group"
-          >
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
-                <Printer className="w-5 h-5" />
-              </div>
-              <div>
-                <h4 className="text-xs font-bold text-slate-200 group-hover:text-indigo-300">Printable Sprint Summary</h4>
-                <p className="text-[11px] text-slate-400">Print or save as PDF via system print dialog</p>
-              </div>
-            </div>
-            <Printer className="w-4 h-4 text-slate-500 group-hover:text-white" />
           </button>
         </div>
 

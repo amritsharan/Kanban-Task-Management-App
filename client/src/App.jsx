@@ -9,6 +9,7 @@ import ProjectModal from './components/ProjectModal';
 import AnalyticsModal from './components/AnalyticsModal';
 import TaskDetailDrawer from './components/TaskDetailDrawer';
 import ExportModal from './components/ExportModal';
+import SprintReportModal from './components/SprintReportModal';
 import ShortcutsModal from './components/ShortcutsModal';
 import Toast from './components/Toast';
 import { api } from './services/api';
@@ -39,6 +40,7 @@ export default function App() {
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
   const [isAnalyticsModalOpen, setIsAnalyticsModalOpen] = useState(false);
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
+  const [isSprintReportOpen, setIsSprintReportOpen] = useState(false);
   const [isShortcutsModalOpen, setIsShortcutsModalOpen] = useState(false);
   const [selectedTaskDetailId, setSelectedTaskDetailId] = useState(null);
 
@@ -109,7 +111,6 @@ export default function App() {
   // Global Keyboard Shortcuts
   useEffect(() => {
     const handleKeyDown = (e) => {
-      // Ignore when user is actively typing in an input or textarea
       if (['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) {
         if (e.key === 'Escape') {
           e.target.blur();
@@ -145,6 +146,7 @@ export default function App() {
         setIsProjectModalOpen(false);
         setIsAnalyticsModalOpen(false);
         setIsExportModalOpen(false);
+        setIsSprintReportOpen(false);
         setIsShortcutsModalOpen(false);
         setSelectedTaskDetailId(null);
       }
@@ -394,7 +396,9 @@ export default function App() {
         <div className="flex items-center gap-3">
           <button onClick={() => setIsShortcutsModalOpen(true)} className="hover:text-indigo-400">Shortcuts (?)</button>
           <span>•</span>
-          <button onClick={() => setIsExportModalOpen(true)} className="hover:text-indigo-400">Export Report</button>
+          <button onClick={() => setIsSprintReportOpen(true)} className="hover:text-indigo-400">PDF Summary</button>
+          <span>•</span>
+          <button onClick={() => setIsExportModalOpen(true)} className="hover:text-indigo-400">Export</button>
         </div>
       </footer>
 
@@ -452,6 +456,16 @@ export default function App() {
         onClose={() => setIsExportModalOpen(false)}
         project={currentProject}
         tasks={tasks}
+        onOpenSprintReport={() => setIsSprintReportOpen(true)}
+      />
+
+      {/* Enhanced Executive Sprint Report PDF Modal */}
+      <SprintReportModal
+        isOpen={isSprintReportOpen}
+        onClose={() => setIsSprintReportOpen(false)}
+        project={currentProject}
+        tasks={tasks}
+        workload={workload}
       />
 
       {/* Keyboard Shortcuts Modal */}
